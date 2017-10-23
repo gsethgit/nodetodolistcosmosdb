@@ -1,0 +1,30 @@
+docker run -p 49160:3000 -d gauravse/nodeexpresscrud
+
+docker exec -it cdeb8ceeaa43 /bin/bash
+
+az group create --name myResourceGroup --location eastus
+
+
+az container create --name nodecrudcontainer --image cadcontreg.azurecr.io/nodeexpresscrud --resource-group westUSRG --ip-address public
+
+az container show --name nodeexpresscrudv1 --resource-group westUSRG
+
+docker login --username=cadcontreg --password=N==+gw7=v2+lA=J/hMWi=u+p2VBBucs5 cadcontreg.azurecr.io
+
+docker tag nodeexpresscrud cadcontreg.azurecr.io/nodeexpresscrud
+
+docker push cadcontreg.azurecr.io/nodeexpresscrud
+
+az container delete --name nodeexpresscrudv1 --resource-group westUSRG
+
+az acr show --name cadcontreg.azurecr.io --query loginServer
+
+az acr credential show --name cadcontreg.azurecr.io --query passwords[0].value
+
+az container create --name nodeexpresscrudv1 --image cadcontreg.azurecr.io/nodeexpresscrud --cpu 1 --memory 1 --registry-login-server cadcontreg.azurecr.io --registry-username cadcontreg --registry-password N==+gw7=v2+lA=J/hMWi=u+p2VBBucs5 --ip-address public -g westUSRG
+
+az container logs --name nodeexpresscrudv1 -g westUSRG
+
+az container delete --name nodeexpresscrudv1 --resource-group westUSRG
+
+az container show --name nodeexpresscrudv1 --resource-group westUSRG
